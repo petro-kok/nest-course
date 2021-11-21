@@ -1,4 +1,3 @@
 export class CreateItemDto {
-    @IsNumbe
-    name: string;
+    title: string;
 }

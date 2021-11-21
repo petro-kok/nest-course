@@ -1,40 +1,35 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, Req} from '@nestjs/common';
-import { ItemService } from './item.service';
-import { CreateItemDto } from './dto/create-item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
-import {Request} from "express";
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from "@nestjs/common";
+import { ItemService } from "./item.service";
+import { CreateItemDto } from "./dto/create-item.dto";
+import { UpdateItemDto } from "./dto/update-item.dto";
+import Item from "./entity/item.entity";
 
-@Controller('item')
+@Controller("item")
 export class ItemController {
-  constructor(private readonly itemService: ItemService) {}
+    constructor(private readonly itemService: ItemService) {}
 
-  @Post()
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.itemService.create(createItemDto);
-  }
+    @Post()
+    create(@Body() createItemDto: CreateItemDto) {
+        return this.itemService.create(createItemDto);
+    }
 
-  @Post()
-  createCustom(@Body() createItemDto: CreateItemDto) {
-    return this.itemService.create(createItemDto);
-  }
+    @Get()
+    findAll(): Promise<Item[]> {
+        return this.itemService.findAll();
+    }
 
-  @Get()
-  findAll() {
-    return this.itemService.findAll();
-  }
+    @Get(":id")
+    findOne(@Param("id") id: number) {
+        return this.itemService.findOne(id);
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.itemService.findOne(+id);
-  }
+    @Patch(":id")
+    update(@Param("id") id: number, @Body() updateItemDto: UpdateItemDto) {
+        return this.itemService.update(id, updateItemDto);
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
-    return this.itemService.update(+id, updateItemDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.itemService.remove(+id);
-  }
+    @Delete(":id")
+    remove(@Param("id") id: number) {
+        return this.itemService.remove(id);
+    }
 }
